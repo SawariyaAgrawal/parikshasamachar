@@ -1,0 +1,17 @@
+---
+description: Safe workflow for integrating Lovable exports
+alwaysApply: true
+---
+
+# Lovable Export Workflow
+
+- Treat all Lovable dumps as raw reference code, not production app code.
+- Keep raw exports under `frontend/lovable-dump/<date>-<feature>/`.
+- Never wire Vite files directly into Next.js (`main.tsx`, `App.tsx`, `vite.config.ts`).
+- Integrate by porting:
+  - UI components -> `src/components/`
+  - Utilities -> `src/lib/`
+  - Page markup -> `src/app/...`
+  - Static assets -> `public/...`
+- Ensure all navigation buttons are connected to existing app routes (`/login`, `/signup`, etc.).
+- After each integration, run lint/build checks and fix issues before finalizing.

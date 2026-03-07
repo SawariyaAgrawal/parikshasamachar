@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3efe6;
+  --surface: #fffefc;
+  --foreground: #1f233a;
+  --muted: #66666d;
+  --border: #c4c5cf;
+  --accent: #c5a54b;
+  --primary: #1f275d;
+  --primary-foreground: #f3efe6;
+  --secondary: #c5a54b;
+  --secondary-foreground: #1f275d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-lora), "Georgia", "Times New Roman", serif;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+.card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 14px;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  min-height: 48px;
+  background: #fff;
+}
+
+.newspaper-bg {
+  background-color: var(--background);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(31, 39, 93, 0.035) 28px,
+    rgba(31, 39, 93, 0.035) 29px
+  );
+}
+
+.newspaper-lined {
+  line-height: 1.75;
+}
+
+.newspaper-rule {
+  border: none;
+  border-top: 2px solid var(--primary);
+  position: relative;
+}
+
+.newspaper-rule::after {
+  content: "";
+  display: block;
+  border-top: 1px solid var(--primary);
+  margin-top: 3px;
+}
