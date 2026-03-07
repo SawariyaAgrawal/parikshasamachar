@@ -1,5 +1,4 @@
 import Image from "next/image";
-import logo from "../../frontend/lovable-dump/2026-02-27-signup-page/logo.png";
 
 interface LogoBadgeProps {
   size?: "sm" | "md";
@@ -18,8 +17,10 @@ export function LogoBadge({ size = "md" }: LogoBadgeProps) {
       title="Pariksha Samachar"
     >
       <Image
-        src={logo}
+        src="/logo.png"
         alt="Pariksha Samachar logo"
+        width={48}
+        height={48}
         className="h-full w-full scale-[1.7] object-cover object-center"
         priority={size === "md"}
       />
