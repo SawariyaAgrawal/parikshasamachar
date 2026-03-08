@@ -58,6 +58,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl
   },
+  icons: {
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    shortcut: ["/logo.png"],
+    apple: [{ url: "/logo.png", type: "image/png" }]
+  },
   category: "education",
   manifest: "/manifest.json"
 };
