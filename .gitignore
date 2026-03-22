@@ -1,26 +1,35 @@
 # dependencies
-/node_modules
+node_modules/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
+# env files (contain secrets)
+.env
+.env.local
+.env.*.local
 
 # debug
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
-# env files
-.env*
+# OS files
+Thumbs.db
+.DS_Store
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# IDE
+.vscode/
+.idea/
+
+# turbopack
+.turbo/
+
+# Non-project files in root
+*.docx
+*.pdf
+prompt.txt
+poster*.png
+QR*.png
+*poster*.png
+Gemini_Generated_Image*
+logo.favicon.png
