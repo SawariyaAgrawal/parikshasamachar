@@ -17,6 +17,7 @@ export interface Profile {
   examSlug: string;
   examYear: string;
   currentCoaching?: string;
+  engineeringYear?: string;
   targetYear?: string;
   preferredLang?: string;
   role: UserRole;

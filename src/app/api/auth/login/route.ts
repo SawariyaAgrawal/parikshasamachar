@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     // Check student
     const { data: profileRow } = await supabase
       .from("profiles")
-      .select("id, full_name, email, phone, city, exam_slug, exam_year, current_coaching, preferred_lang, role, created_at, password_hash")
+      .select("id, full_name, email, phone, city, exam_slug, exam_year, engineering_year, current_coaching, preferred_lang, role, created_at, password_hash")
       .ilike("email", email)
       .maybeSingle();
 
@@ -72,6 +72,7 @@ export async function POST(req: NextRequest) {
         city: profileRow.city,
         examSlug: profileRow.exam_slug,
         examYear: profileRow.exam_year,
+        engineeringYear: profileRow.engineering_year || "",
         currentCoaching: profileRow.current_coaching || "",
         preferredLang: profileRow.preferred_lang || "en",
         role: profileRow.role,

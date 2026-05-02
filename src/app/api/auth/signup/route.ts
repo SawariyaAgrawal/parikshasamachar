@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
       city,
       examSlug,
       examYear,
+      engineeringYear,
       currentCoaching,
       preferredLang,
       otp
@@ -47,6 +48,12 @@ export async function POST(req: NextRequest) {
     }
     if (!EXAMS.some((e) => e.slug === examSlug)) {
       return NextResponse.json({ error: "Invalid exam" }, { status: 400 });
+    }
+    const validEngYears = ["FE", "SE", "TE", "BE"];
+    if (examSlug === "engineering-sppu") {
+      if (!engineeringYear || !validEngYears.includes(engineeringYear)) {
+        return NextResponse.json({ error: "Current year of engineering is required for Engineering (SPPU)" }, { status: 400 });
+      }
     }
 
     const supabase = createSupabaseAdmin();
@@ -85,11 +92,12 @@ export async function POST(req: NextRequest) {
         city: city.trim(),
         exam_slug: examSlug,
         exam_year: String(examYear).trim(),
+        engineering_year: examSlug === "engineering-sppu" ? engineeringYear : "",
         current_coaching: (currentCoaching || "").trim(),
         preferred_lang: preferredLang || "en",
         role: "student"
       })
-      .select("id, full_name, email, phone, city, exam_slug, exam_year, current_coaching, preferred_lang, role, created_at")
+      .select("id, full_name, email, phone, city, exam_slug, exam_year, engineering_year, current_coaching, preferred_lang, role, created_at")
       .single();
 
     if (error) {
@@ -111,6 +119,7 @@ export async function POST(req: NextRequest) {
       city: data.city,
       examSlug: data.exam_slug,
       examYear: data.exam_year,
+      engineeringYear: data.engineering_year || "",
       currentCoaching: data.current_coaching || "",
       preferredLang: data.preferred_lang || "en",
       role: data.role,

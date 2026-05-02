@@ -24,6 +24,12 @@ export const EXAMS: Exam[] = [
     name: "SAT (Postgraduate)",
     slug: "sat-pg",
     description: "Postgraduate admissions test preparation."
+  },
+  {
+    id: "5",
+    name: "Engineering (SPPU)",
+    slug: "engineering-sppu",
+    description: "Savitribai Phule Pune University engineering exam updates and preparation."
   }
 ];
 
@@ -38,6 +44,13 @@ export const STORAGE_KEYS = {
   adminConfig: "ps_admin_config",
   moderators: "ps_moderators"
 };
+
+export const ENGINEERING_YEARS = [
+  { value: "FE", label: "First Year (FE)" },
+  { value: "SE", label: "Second Year (SE)" },
+  { value: "TE", label: "Third Year (TE)" },
+  { value: "BE", label: "Final Year (BE)" }
+] as const;
 
 export const NOTIFICATION_LANGUAGES = [
   { code: "en", name: "English" },

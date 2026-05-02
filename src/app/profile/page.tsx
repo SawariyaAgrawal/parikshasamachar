@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TopNav } from "@/components/TopNav";
-import { EXAMS, NOTIFICATION_LANGUAGES } from "@/lib/constants";
+import { EXAMS, ENGINEERING_YEARS, NOTIFICATION_LANGUAGES } from "@/lib/constants";
 import { getProfiles, getSession, setSession, updateProfile } from "@/lib/storage";
 import { Profile } from "@/types";
 
@@ -18,6 +18,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [examSlug, setExamSlug] = useState("");
   const [examYear, setExamYear] = useState("");
+  const [engineeringYear, setEngineeringYear] = useState("");
   const [currentCoaching, setCurrentCoaching] = useState("");
   const [preferredLang, setPreferredLang] = useState("en");
   const [message, setMessage] = useState("");
@@ -35,6 +36,7 @@ export default function ProfilePage() {
       setProfile(found);
       setExamSlug(found?.examSlug ?? "");
       setExamYear(found?.examYear ?? "");
+      setEngineeringYear(found?.engineeringYear ?? "");
       setCurrentCoaching(found?.currentCoaching ?? "");
       setPreferredLang(found?.preferredLang ?? "en");
     }
@@ -64,6 +66,7 @@ export default function ProfilePage() {
       city: profile.city,
       examSlug,
       examYear: examYear.trim(),
+      engineeringYear: examSlug === "engineering-sppu" ? engineeringYear : "",
       currentCoaching: currentCoaching.trim(),
       preferredLang
     };
@@ -167,6 +170,12 @@ export default function ProfilePage() {
                   <p>
                     <strong>Exam Year:</strong> {profile.examYear}
                   </p>
+                  {profile.examSlug === "engineering-sppu" && profile.engineeringYear && (
+                    <p>
+                      <strong>Engineering Year:</strong>{" "}
+                      {ENGINEERING_YEARS.find((y) => y.value === profile.engineeringYear)?.label ?? profile.engineeringYear}
+                    </p>
+                  )}
                   <p>
                     <strong>Preferred Language:</strong>{" "}
                     {NOTIFICATION_LANGUAGES.find((l) => l.code === profile.preferredLang)?.name ?? "English"}
@@ -214,7 +223,12 @@ export default function ProfilePage() {
                     <select
                       className="input"
                       value={examSlug}
-                      onChange={(event) => setExamSlug(event.target.value)}
+                      onChange={(event) => {
+                        setExamSlug(event.target.value);
+                        if (event.target.value !== "engineering-sppu") {
+                          setEngineeringYear("");
+                        }
+                      }}
                       required
                     >
                       <option value="">Select exam</option>
@@ -225,6 +239,26 @@ export default function ProfilePage() {
                     ))}
                     </select>
                   </div>
+                  {examSlug === "engineering-sppu" && (
+                    <div>
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-neutral-600">
+                        Current year of engineering
+                      </label>
+                      <select
+                        className="input"
+                        value={engineeringYear}
+                        onChange={(event) => setEngineeringYear(event.target.value)}
+                        required
+                      >
+                        <option value="">Select year</option>
+                        {ENGINEERING_YEARS.map((y) => (
+                          <option key={y.value} value={y.value}>
+                            {y.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                   <div>
                     <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-neutral-600">
                       Exam year

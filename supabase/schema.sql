@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   city TEXT NOT NULL,
   exam_slug TEXT NOT NULL,
   exam_year TEXT NOT NULL,
+  engineering_year TEXT DEFAULT '',
   current_coaching TEXT DEFAULT '',
   role TEXT NOT NULL DEFAULT 'student',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

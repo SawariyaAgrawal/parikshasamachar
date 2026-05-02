@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { TopNav } from "@/components/TopNav";
-import { EXAMS, NOTIFICATION_LANGUAGES } from "@/lib/constants";
+import { EXAMS, ENGINEERING_YEARS, NOTIFICATION_LANGUAGES } from "@/lib/constants";
 import { saveProfile, setSession } from "@/lib/storage";
 import { Profile } from "@/types";
 
@@ -17,6 +17,7 @@ export default function SignupPage() {
   const [city, setCity] = useState("");
   const [examSlug, setExamSlug] = useState("");
   const [examYear, setExamYear] = useState("");
+  const [engineeringYear, setEngineeringYear] = useState("");
   const [currentCoaching, setCurrentCoaching] = useState("");
   const [preferredLang, setPreferredLang] = useState("en");
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -43,6 +44,10 @@ export default function SignupPage() {
     }
     if (!examSlug) {
       setError("Please select an exam.");
+      return;
+    }
+    if (examSlug === "engineering-sppu" && !engineeringYear) {
+      setError("Please select your current year of engineering.");
       return;
     }
 
@@ -91,6 +96,7 @@ export default function SignupPage() {
             city: city.trim(),
             examSlug,
             examYear: examYear.trim(),
+            engineeringYear: examSlug === "engineering-sppu" ? engineeringYear : "",
             currentCoaching: currentCoaching.trim(),
             preferredLang,
             ...(otpRequired && { otp: otp.trim() })
@@ -112,6 +118,7 @@ export default function SignupPage() {
             city: data.profile.city,
             examSlug: data.profile.examSlug,
             examYear: data.profile.examYear,
+            engineeringYear: data.profile.engineeringYear || "",
             currentCoaching: data.profile.currentCoaching || "",
             preferredLang: data.profile.preferredLang || "en",
             role: "student",
@@ -135,6 +142,7 @@ export default function SignupPage() {
       city: city.trim(),
       examSlug,
       examYear: examYear.trim(),
+      engineeringYear: examSlug === "engineering-sppu" ? engineeringYear : "",
       currentCoaching: currentCoaching.trim(),
       preferredLang,
       role: "student",
@@ -278,7 +286,12 @@ export default function SignupPage() {
             <select
               className="input"
               value={examSlug}
-              onChange={(event) => setExamSlug(event.target.value)}
+              onChange={(event) => {
+                setExamSlug(event.target.value);
+                if (event.target.value !== "engineering-sppu") {
+                  setEngineeringYear("");
+                }
+              }}
               required
             >
               <option value="">Select exam</option>
@@ -288,9 +301,29 @@ export default function SignupPage() {
                 </option>
               ))}
             </select>
+            {examSlug === "engineering-sppu" && (
+              <>
+                <label className="text-sm font-semibold">
+                  Current year of engineering (mandatory)
+                </label>
+                <select
+                  className="input"
+                  value={engineeringYear}
+                  onChange={(event) => setEngineeringYear(event.target.value)}
+                  required
+                >
+                  <option value="">Select year</option>
+                  {ENGINEERING_YEARS.map((y) => (
+                    <option key={y.value} value={y.value}>
+                      {y.label}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
             <input
               className="input"
-              placeholder="Year of appearing exam (mandatory)"
+              placeholder={examSlug === "engineering-sppu" ? "Year of passing (mandatory)" : "Year of appearing exam (mandatory)"}
               value={examYear}
               onChange={(event) => setExamYear(event.target.value)}
               minLength={4}
