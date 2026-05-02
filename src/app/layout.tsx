@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Lora } from "next/font/google";
 import "@fontsource/manufacturing-consent/400.css";
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/next';
 
 const lora = Lora({
   subsets: ["latin"],
@@ -104,6 +105,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );
