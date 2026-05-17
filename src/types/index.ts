@@ -86,6 +86,7 @@ export type NotificationTitle = string | Record<string, string>;
 export interface PreviousExamNotification {
   id: string;
   examSlug: string;
+  engineeringYear?: string;
   title: NotificationTitle;
   body: NotificationBody;
   link?: string;

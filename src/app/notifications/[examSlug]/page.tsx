@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import { TopNav } from "@/components/TopNav";
-import { ensureSeedData, getNotifications, getSession } from "@/lib/storage";
+import { ensureSeedData, getNotifications, getProfiles, getSession } from "@/lib/storage";
 import { NOTIFICATION_LANGUAGES } from "@/lib/constants";
 import type { NotificationBody } from "@/types";
 
@@ -28,6 +28,7 @@ export default function NotificationsPage() {
   const router = useRouter();
   const examSlug = params.examSlug;
   const [lang, setLang] = useState("en");
+  const [engineeringYear, setEngineeringYear] = useState<string | undefined>();
 
   useEffect(() => {
     ensureSeedData();
@@ -39,11 +40,20 @@ export default function NotificationsPage() {
     if (session.preferredLang) {
       setLang(session.preferredLang);
     }
+    const profile = getProfiles().find((p) => p.id === session.userId);
+    setEngineeringYear(profile?.engineeringYear);
   }, [router]);
 
   const notifications = useMemo(
-    () => getNotifications().filter((item) => item.examSlug === examSlug),
-    [examSlug]
+    () =>
+      getNotifications().filter((item) => {
+        if (item.examSlug !== examSlug) return false;
+        if (examSlug === "engineering-sppu" && item.engineeringYear) {
+          return item.engineeringYear === engineeringYear;
+        }
+        return true;
+      }),
+    [examSlug, engineeringYear]
   );
 
   return (

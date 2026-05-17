@@ -74,6 +74,7 @@ CREATE INDEX IF NOT EXISTS idx_chat_blacklist_user_exam ON chat_blacklist(user_i
 CREATE TABLE IF NOT EXISTS notifications (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   exam_slug TEXT NOT NULL,
+  engineering_year TEXT,
   title JSONB NOT NULL,
   body JSONB NOT NULL,
   link TEXT,

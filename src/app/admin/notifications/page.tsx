@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TopNav } from "@/components/TopNav";
-import { EXAMS, NOTIFICATION_LANGUAGES } from "@/lib/constants";
+import { EXAMS, ENGINEERING_YEARS, NOTIFICATION_LANGUAGES } from "@/lib/constants";
 import {
   deleteNotification,
   getNotifications,
@@ -20,6 +20,7 @@ const INITIAL_LANG: Record<string, string> = { en: "", hi: "", mr: "" };
 export default function AdminNotificationsPage() {
   const router = useRouter();
   const [examSlug, setExamSlug] = useState("");
+  const [engineeringYear, setEngineeringYear] = useState("");
   const [titleByLang, setTitleByLang] = useState<Record<string, string>>({ ...INITIAL_LANG });
   const [bodyByLang, setBodyByLang] = useState<Record<string, string>>({ ...INITIAL_LANG });
   const [activeLang, setActiveLang] = useState("en");
@@ -63,8 +64,14 @@ export default function AdminNotificationsPage() {
 
   const recipientCount = useMemo(() => {
     if (!examSlug) return 0;
-    return getProfiles().filter((p) => p.role === "student" && p.examSlug === examSlug).length;
-  }, [examSlug]);
+    return getProfiles().filter((p) => {
+      if (p.role !== "student" || p.examSlug !== examSlug) return false;
+      if (examSlug === "engineering-sppu" && engineeringYear) {
+        return p.engineeringYear === engineeringYear;
+      }
+      return true;
+    }).length;
+  }, [examSlug, engineeringYear]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,6 +86,8 @@ export default function AdminNotificationsPage() {
     const notification: PreviousExamNotification = {
       id: crypto.randomUUID(),
       examSlug,
+      engineeringYear:
+        examSlug === "engineering-sppu" && engineeringYear ? engineeringYear : undefined,
       title:
         Object.keys(title).length === 0
           ? ""
@@ -96,6 +105,7 @@ export default function AdminNotificationsPage() {
     setBodyByLang({ ...INITIAL_LANG });
     setLink("");
     setDocumentUrl("");
+    setEngineeringYear("");
     setShowForm(false);
     setSuccessMsg("Notification sent successfully.");
     setTimeout(() => setSuccessMsg(""), 3000);
@@ -158,7 +168,12 @@ export default function AdminNotificationsPage() {
                 <select
                   className="input"
                   value={examSlug}
-                  onChange={(e) => setExamSlug(e.target.value)}
+                  onChange={(e) => {
+                    setExamSlug(e.target.value);
+                    if (e.target.value !== "engineering-sppu") {
+                      setEngineeringYear("");
+                    }
+                  }}
                   required
                 >
                   <option value="">Select exam</option>
@@ -169,9 +184,34 @@ export default function AdminNotificationsPage() {
                   ))}
                 </select>
                 <p className="mt-1 text-xs text-neutral-500">
-                  Recipients: {recipientCount} student(s) preparing for this exam
+                  Recipients: {recipientCount} student(s)
+                  {examSlug === "engineering-sppu" && engineeringYear
+                    ? ` in ${ENGINEERING_YEARS.find((y) => y.value === engineeringYear)?.label ?? engineeringYear}`
+                    : examSlug
+                      ? " preparing for this exam"
+                      : ""}
                 </p>
               </div>
+              {examSlug === "engineering-sppu" && (
+                <div>
+                  <label className="mb-1 block text-sm font-semibold">Target engineering year</label>
+                  <select
+                    className="input"
+                    value={engineeringYear}
+                    onChange={(e) => setEngineeringYear(e.target.value)}
+                  >
+                    <option value="">All years (FE, SE, TE, BE)</option>
+                    {ENGINEERING_YEARS.map((y) => (
+                      <option key={y.value} value={y.value}>
+                        {y.label}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    Leave on &quot;All years&quot; to push to every Engineering (SPPU) student. Pick a year to target only that batch.
+                  </p>
+                </div>
+              )}
               <div className="mb-2">
                 <label className="mb-2 block text-sm font-semibold">Language</label>
                 <div className="flex gap-2">
@@ -278,6 +318,11 @@ export default function AdminNotificationsPage() {
                               {typeof n.title === "string"
                                 ? n.title
                                 : (n.title.en ?? n.title.hi ?? n.title.mr ?? Object.values(n.title)[0] ?? "")}
+                              {n.engineeringYear && (
+                                <span className="ml-2 rounded-sm bg-[#1f275d]/10 px-1.5 py-0.5 text-xs font-medium text-[#1f275d]">
+                                  {ENGINEERING_YEARS.find((y) => y.value === n.engineeringYear)?.label ?? n.engineeringYear}
+                                </span>
+                              )}
                             </p>
                             <p className="mt-1 text-neutral-600">
                               {typeof n.body === "string"
