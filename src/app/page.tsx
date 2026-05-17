@@ -14,9 +14,7 @@ export default function LandingPage() {
 
       <section className="mx-auto max-w-6xl px-4 pt-4 pb-2 text-center md:px-8 md:pt-6">
         <p className="text-xs uppercase tracking-[0.3em] text-[#66666d]">
-          <span className="inline-block border-b-2 border-[#c0392b] pb-0.5">
-            Vol. I • Issue 1 • Est. 2025
-          </span>
+          Vol. I • Issue 1 • Est. 2025
         </p>
         <h2
           className="my-2 text-3xl font-normal tracking-wide text-[#1f275d] sm:text-4xl md:text-7xl lg:text-8xl"
@@ -24,15 +22,9 @@ export default function LandingPage() {
         >
           Pariksha Samachar
         </h2>
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-[#66666d]">
-          <span className="inline-flex flex-wrap items-center justify-center gap-3 border-b-2 border-[#1f275d] pb-0.5">
-            <span>{formattedDate}</span>
-            <span>•</span>
-            <span>India&apos;s Premier Exam Notification Platform</span>
-            <span>•</span>
-            <span>Free to Join</span>
-          </span>
-        </div>
+        <p className="text-xs uppercase tracking-[0.3em] text-[#66666d]">
+          {formattedDate} • India&apos;s Premier Exam Notification Platform • Free to Join
+        </p>
         <hr className="newspaper-rule mt-4" />
       </section>
 
