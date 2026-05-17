@@ -18,7 +18,6 @@ export default function SignupPage() {
   const [examSlug, setExamSlug] = useState("");
   const [examYear, setExamYear] = useState("");
   const [engineeringYear, setEngineeringYear] = useState("");
-  const [currentCoaching, setCurrentCoaching] = useState("");
   const [preferredLang, setPreferredLang] = useState("en");
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [error, setError] = useState("");
@@ -97,7 +96,7 @@ export default function SignupPage() {
             examSlug,
             examYear: examYear.trim(),
             engineeringYear: examSlug === "engineering-sppu" ? engineeringYear : "",
-            currentCoaching: currentCoaching.trim(),
+            currentCoaching: "",
             preferredLang,
             ...(otpRequired && { otp: otp.trim() })
           })
@@ -143,7 +142,7 @@ export default function SignupPage() {
       examSlug,
       examYear: examYear.trim(),
       engineeringYear: examSlug === "engineering-sppu" ? engineeringYear : "",
-      currentCoaching: currentCoaching.trim(),
+      currentCoaching: "",
       preferredLang,
       role: "student",
       createdAt: new Date().toISOString()
@@ -346,12 +345,6 @@ export default function SignupPage() {
                 </option>
               ))}
             </select>
-            <input
-              className="input"
-              placeholder="Current coaching"
-              value={currentCoaching}
-              onChange={(event) => setCurrentCoaching(event.target.value)}
-            />
             <label className="flex cursor-pointer items-start gap-3">
               <input
                 type="checkbox"

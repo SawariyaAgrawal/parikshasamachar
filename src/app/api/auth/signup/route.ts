@@ -62,20 +62,27 @@ export async function POST(req: NextRequest) {
     }
 
     if (process.env.BREVO_API_KEY) {
-      if (!otp || !String(otp).trim()) {
+      const cleanedOtp = String(otp ?? "").replace(/\D/g, "").trim();
+      if (!cleanedOtp) {
         return NextResponse.json({ error: "Email verification OTP is required" }, { status: 400 });
       }
       const normalizedEmail = email.trim().toLowerCase();
-      const { data: otpRow } = await supabase
+      const { data: otpRow, error: otpErr } = await supabase
         .from("otp_verifications")
-        .select("id")
+        .select("id, otp, expires_at")
         .eq("email", normalizedEmail)
-        .eq("otp", String(otp).trim())
+        .eq("otp", cleanedOtp)
         .gt("expires_at", new Date().toISOString())
         .limit(1)
         .maybeSingle();
+      if (otpErr) {
+        console.error("OTP lookup error:", otpErr);
+      }
       if (!otpRow) {
-        return NextResponse.json({ error: "Invalid or expired OTP. Please request a new one." }, { status: 400 });
+        return NextResponse.json(
+          { error: "Invalid or expired OTP. Please request a new one." },
+          { status: 400 }
+        );
       }
       await supabase.from("otp_verifications").delete().eq("email", normalizedEmail);
     }
