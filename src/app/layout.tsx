@@ -60,9 +60,12 @@ export const metadata: Metadata = {
     canonical: siteUrl
   },
   icons: {
-    icon: [{ url: "/logo.png", type: "image/png" }],
-    shortcut: ["/logo.png"],
-    apple: [{ url: "/logo.png", type: "image/png" }]
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "256x256" },
+      { url: "/logo.png", type: "image/png", sizes: "1024x1024" }
+    ],
+    shortcut: ["/favicon.png"],
+    apple: [{ url: "/logo.png", type: "image/png", sizes: "1024x1024" }]
   },
   category: "education",
   manifest: "/manifest.json"
