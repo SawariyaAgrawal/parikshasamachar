@@ -19,8 +19,10 @@ export function LogoBadge({ size = "md" }: LogoBadgeProps) {
       <Image
         src="/logo.png"
         alt="Pariksha Samachar logo"
-        width={64}
-        height={64}
+        width={256}
+        height={256}
+        quality={95}
+        sizes="(max-width: 768px) 36px, 48px"
         className="h-full w-full object-contain"
         priority={size === "md"}
       />

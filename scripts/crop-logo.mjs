@@ -4,7 +4,7 @@ import path from "node:path";
 
 const SRC = path.resolve("shield logo.png");
 const OUT = path.resolve("public/logo.png");
-const CANVAS = 512;
+const CANVAS = 1024;
 
 const trimmed = await sharp(SRC)
   .trim({ background: { r: 240, g: 234, b: 220 }, threshold: 12 })
@@ -19,6 +19,7 @@ const resized = await sharp(trimmed)
     width: trimmedMeta.width >= trimmedMeta.height ? innerSize : undefined,
     height: trimmedMeta.height > trimmedMeta.width ? innerSize : undefined,
     fit: "contain",
+    kernel: "lanczos3",
     background: { r: 0, g: 0, b: 0, alpha: 0 }
   })
   .toBuffer();
@@ -35,7 +36,7 @@ const final = await sharp(resized)
     right: CANVAS - resizedMeta.width - padX,
     background: { r: 0, g: 0, b: 0, alpha: 0 }
   })
-  .png({ compressionLevel: 9, palette: true })
+  .png({ compressionLevel: 9, adaptiveFiltering: true })
   .toBuffer();
 
 await writeFile(OUT, final);
