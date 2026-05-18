@@ -12,16 +12,16 @@ export function LogoBadge({ size = "md" }: LogoBadgeProps) {
 
   return (
     <div
-      className={`overflow-hidden rounded-full border border-[#1f275d]/20 bg-white ${classes}`}
+      className={`flex items-center justify-center ${classes}`}
       aria-label="Pariksha Samachar logo"
       title="Pariksha Samachar"
     >
       <Image
         src="/logo.png"
         alt="Pariksha Samachar logo"
-        width={48}
-        height={48}
-        className="h-full w-full scale-[1.7] object-cover object-center"
+        width={64}
+        height={64}
+        className="h-full w-full object-contain"
         priority={size === "md"}
       />
     </div>
