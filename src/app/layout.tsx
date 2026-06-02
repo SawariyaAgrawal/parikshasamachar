@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { Lora } from "next/font/google";
 import "@fontsource/manufacturing-consent/400.css";
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/next';
 
 const lora = Lora({
   subsets: ["latin"],
